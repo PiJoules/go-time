@@ -1,0 +1,7 @@
+7 5
+b
+ bb bb 
+bww wwb
+ bbbbb 
+bwwwb  
+ bb    

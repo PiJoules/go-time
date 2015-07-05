@@ -1,5 +1,13 @@
-3 3
-b
-bbb
-bww
-bww
+9 11
+w
+    ww   
+  wwbbbw 
+  wbbbbw 
+ wwbbbbw 
+ wwwwwww 
+ wbbbbww 
+ wbwbbww 
+ wbwbbww 
+ wwwbbww 
+    wbw  
+    w    
