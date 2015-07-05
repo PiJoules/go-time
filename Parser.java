@@ -50,11 +50,10 @@ public class Parser{
 						g.printCoordinates();
 						Point[] coordinates = g.getCoordinates();
 						for (Point coord : coordinates){
-							checkedPoints[(int)p.getY()][(int)p.getX()] = true;
+							checkedPoints[(int)coord.getY()][(int)coord.getX()] = true;
 						}
 						groups.add(g);
 					}
-
 					checkedPoints[y][x] = true;
 				}
 			}

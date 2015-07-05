@@ -27,30 +27,59 @@ public class Group {
 		this.w = w;
 		this.h = h;
 
+		boolean[][] checkedSpaces = new boolean[h][w];
 		while (!uncheckedAdjacentSpaces.isEmpty()){
 			Point p = uncheckedAdjacentSpaces.remove();
 			x0 = (int)p.getX();
 			y0 = (int)p.getY();
-			int startX = Math.max(0, x0-1);
-			int startY = Math.max(0, y0-1);
-			int endX = Math.min(w, x0+2);
-			int endY = Math.max(h, y0+2);
-			for (int y = startY; y < endY; y++){
-				for (int x = startX; x < endX; x++){
-					if (x != x0 && y != y0){
-						char c = board[y][x];
-						Point p2 = new Point(x,y);
-						if (c == EMPTY && !this.emptyAdjacentSpaces.contains(p2)){
-							this.emptyAdjacentSpaces.add(p2);
-						}
-						else if (c == piece && !this.coordinates.contains(p2)){
-							uncheckedAdjacentSpaces.add(p2);
-						}
-					}
+			checkedSpaces[y0][x0] = true;
+			if (x0 > 0){
+				Point p2 = new Point(x0-1,y0);
+				if (checkPiece(EMPTY, board, checkedSpaces, x0-1, y0)){
+					this.emptyAdjacentSpaces.add(p2);
 				}
+				else if (checkPiece(piece, board, checkedSpaces, x0-1, y0)){
+					uncheckedAdjacentSpaces.add(p2);
+				}
+				checkedSpaces[y0][x0-1] = true;
+			}
+			if (x0 < w-1){
+				Point p2 = new Point(x0+1,y0);
+				if (checkPiece(EMPTY, board, checkedSpaces, x0+1, y0)){
+					this.emptyAdjacentSpaces.add(p2);
+				}
+				else if (checkPiece(piece, board, checkedSpaces, x0+1, y0)){
+					uncheckedAdjacentSpaces.add(p2);
+				}
+				checkedSpaces[y0][x0+1] = true;
+			}
+			if (y0 > 0){
+				Point p2 = new Point(x0,y0-1);
+				if (checkPiece(EMPTY, board, checkedSpaces, x0, y0-1)){
+					this.emptyAdjacentSpaces.add(p2);
+				}
+				else if (checkPiece(piece, board, checkedSpaces, x0, y0-1)){
+					uncheckedAdjacentSpaces.add(p2);
+				}
+				checkedSpaces[y0-1][x0] = true;
+			}
+			if (y0 < h-1){
+				Point p2 = new Point(x0,y0+1);
+				if (checkPiece(EMPTY, board, checkedSpaces, x0, y0+1)){
+					this.emptyAdjacentSpaces.add(p2);
+				}
+				else if (checkPiece(piece, board, checkedSpaces, x0, y0+1)){
+					uncheckedAdjacentSpaces.add(p2);
+				}
+				checkedSpaces[y0+1][x0] = true;
 			}
 			coordinates.add(p);
 		}
+	}
+
+	/* This was meant to reduce the number of lines in the contructor, but it didn't work out very well. */
+	private static boolean checkPiece(char piece, char[][] board, boolean[][] checkedSpaces, int x, int y){
+		return board[y][x] == piece && !checkedSpaces[y][x];
 	}
 
 	public Point[] getCoordinates(){
@@ -60,11 +89,17 @@ public class Group {
 	public void printCoordinates(){
 		char[][] board = new char[this.h][this.w];
 		for (Point p : this.coordinates){
-			board[(int)p.getY()][(int)p.getX()] = 's';
+			board[(int)p.getY()][(int)p.getX()] = this.piece;
 		}
 		for (int y = 0; y < this.h; y++){
 			for (int x = 0; x < this.w; x++){
-				System.out.print(board[y][x]);
+				char c = board[y][x];
+				if (c == this.piece){
+					System.out.print(board[y][x]);
+				}
+				else{
+					System.out.print(".");
+				}
 			}
 			System.out.println("");
 		}
