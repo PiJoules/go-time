@@ -46,8 +46,6 @@ public class Parser{
 					}
 					else if (c == opponent){
 						Group g = new Group(x,y,board,opponent);
-						System.out.println("group:");
-						g.printCoordinates();
 						Point[] coordinates = g.getCoordinates();
 						for (Point coord : coordinates){
 							checkedPoints[(int)coord.getY()][(int)coord.getX()] = true;
@@ -59,15 +57,31 @@ public class Parser{
 			}
 		}
 
-		/* Print stuff */
-		System.out.println("w: " + w + " h: " + h);
-		System.out.println("player: " + player);
-		System.out.println("board:");
-		for (int y = 0; y < h; y++){
-			for (int x = 0; x < w; x++){
-				System.out.print(board[y][x]);
+		// Compare the scores
+		Point bestPoint = null;
+		int maxScore = 0;
+		for (Point p : emptySpaces){
+			int score = 0;
+			for (Group g : groups){
+				Point[] adjEmptSpaces = g.getEmptyAdjascentSpaces();
+				if (adjEmptSpaces.length == 1){
+					if (adjEmptSpaces[0].equals(p)){
+						score += g.getCoordinates().length;
+					}
+				}
 			}
-			System.out.println("");
+			if (score > maxScore){
+				maxScore = score;
+				bestPoint = p;
+			}
+		}
+
+		/* Print stuff */
+		if (bestPoint == null){
+			System.out.println("No constructive move");
+		}
+		else {
+			System.out.println("(" + (int)bestPoint.getX() + ", " + (int)bestPoint.getY() + ")");
 		}
 	}
 }
